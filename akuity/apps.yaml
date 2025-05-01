@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: guestbook
-  namespace: argocd
+  namespace: akuity
 spec:
   generators:
     - matrix:
@@ -10,29 +10,29 @@ spec:
           - clusters:
               selector:
                 matchExpressions:
-                - {key: akuity.io/argo-cd-cluster-name, operator: NotIn, values: [in-cluster]}
+                  - { key: akuity.io/argo-cd-cluster-name, operator: NotIn, values: [in-cluster] }
           - list:
               elements:
-              - env: dev
-              - env: uat
-              - env: prod
+                - env: dev
+                - env: uat
+                - env: prod
   template:
     metadata:
-      name: 'guestbook-simple-{{env}}'
+      name: "guestbook-simple-{{env}}"
       annotations:
         kargo.akuity.io/authorized-stage: kargo-simple:{{env}}
     spec:
       project: default
       source:
-        repoURL: https://github.com/<repo>
+        repoURL: https://github.com/thomastaylor312/kargo-quickstart
         targetRevision: main
-        path: 'app/env/{{env}}'
+        path: "app/env/{{env}}"
       destination:
-        name: '{{name}}'
-        namespace: 'guestbook-simple-{{env}}'
+        name: "{{name}}"
+        namespace: "guestbook-simple-{{env}}"
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
         syncOptions:
-        - CreateNamespace=true
+          - CreateNamespace=true

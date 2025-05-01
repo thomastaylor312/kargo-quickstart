@@ -5,6 +5,6 @@ metadata:
   namespace: kargo-simple
 spec:
   subscriptions:
-  - image:
-      repoURL: ghcr.io/<user>/guestbook
-      discoveryLimit: 5
+    - image:
+        repoURL: ghcr.io/thomastaylor312/guestbook
+        discoveryLimit: 5

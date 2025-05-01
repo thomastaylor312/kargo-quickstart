@@ -14,8 +14,8 @@ spec:
         app: guestbook-simple
     spec:
       containers:
-      - image: ghcr.io/<user>/guestbook:latest
-        name: guestbook-simple
-        ports:
-        - name: http
-          containerPort: 3000
+        - image: ghcr.io/thomastaylor312/guestbook:latest
+          name: guestbook-simple
+          ports:
+            - name: http
+              containerPort: 3000
