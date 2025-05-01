@@ -87,12 +87,13 @@ spec:
         - uses: kustomize-set-image
           as: update-image
           config:
-            path: ./src/base
+            path: ./src/app/base
             images:
               - image: ghcr.io/thomastaylor312/guestbook
+                tag: ${{ imageFrom("ghcr.io/thomastaylor312/guestbook").Tag }}
         - uses: kustomize-build
           config:
-            path: ./src/stages/uat
+            path: ./src/app/env/uat
             outPath: ./out/manifests.yaml
         - uses: git-commit
           as: commit
@@ -107,10 +108,10 @@ spec:
         - uses: argocd-update
           config:
             apps:
-              - name: kargo-simple-uat
+              - name: guestbook-simple-uat
                 sources:
                   - repoURL: https://github.com/thomastaylor312/kargo-quickstart
-                    desiredCommitFromStep: commit
+                    desiredRevision: ${{ outputs.commit.commit }}
 ---
 apiVersion: kargo.akuity.io/v1alpha1
 kind: Stage
@@ -143,12 +144,12 @@ spec:
         - uses: kustomize-set-image
           as: update-image
           config:
-            path: ./src/base
+            path: ./src/app/base
             images:
               - image:
         - uses: kustomize-build
           config:
-            path: ./src/stages/prod
+            path: ./src/app/env/prod
             outPath: ./out/manifests.yaml
         - uses: git-commit
           as: commit
@@ -163,7 +164,7 @@ spec:
         - uses: argocd-update
           config:
             apps:
-              - name: my-argocd-instance
+              - name: guestbook-simple-prod
                 sources:
                   - repoURL: https://github.com/thomastaylor312/kargo-quickstart
-                    desiredCommitFromStep: commit
+                    desiredRevision: ${{ outputs.commit.commit }}
